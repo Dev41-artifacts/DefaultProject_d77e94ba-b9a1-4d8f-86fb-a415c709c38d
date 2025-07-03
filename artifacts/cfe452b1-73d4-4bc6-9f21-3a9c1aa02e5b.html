@@ -1,0 +1,410 @@
+<html lang="en" class="bg-background">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second-Hand Marketplace Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #FF4D4D;
+            --secondary: #000000;
+            --surface: #292929;
+            --textPrimary: #FFFFFF;
+            --textSecondary: #BFBFBF;
+            --background: #1A1A1A;
+            --border-card: #444444;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--textPrimary);
+        }
+        
+        .card {
+            backdrop-filter: blur(10px);
+            background: rgba(26, 26, 26, 0.75);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #FF4D4D 0%, #FF7878 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #FF7878 100%);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e03d3d 0%, #ff6060 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 77, 77, 0.3);
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--secondary) 0%, #303030 100%);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-action:hover {
+            background: linear-gradient(135deg, #4d4d4d 0%, #5a5a5a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(64, 64, 64, 0.3);
+        }
+
+        .input-field {
+            background-color: var(--surface);
+            border: 1px solid var(--border-card);
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.1);
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-primary {
+            background: rgba(255, 77, 77, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: var(--surface);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #FF7878);
+            border-radius: 4px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(240, 240, 240, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-textPrimary min-h-screen">
+    <!-- Sticky Header -->
+    <header class="sticky top-0 bg-black/90 backdrop-blur-xl border-b border-slate-200/60 z-50 py-3 px-6">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-primary to-black flex items-center justify-center">
+                    <span class="text-white font-bold">SH</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-primary">Second-Hand Marketplace</h1>
+                    <p class="text-xs text-textSecondary">For College Students</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-surface transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-textSecondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-black flex items-center justify-center text-white font-semibold">JS</div>
+                    <span class="text-sm font-medium">John Smith</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="px-6 py-8 max-w-7xl mx-auto">
+        <!-- Hero Section -->
+        <section class="mb-10">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Second-Hand Marketplace Dashboard</h1>
+                    <p class="text-lg text-textSecondary max-w-3xl">Connect students looking to buy and sell second-hand products easily.</p>
+                </div>
+                <button class="btn-primary px-6 py-3 rounded-lg font-semibold flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    List a New Product
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                <div class="metric-card p-5 flex flex-col">
+                    <div class="text-sm mb-1">Total Listings</div>
+                    <div class="text-2xl font-bold">182</div>
+                    <div class="text-sm opacity-80 mt-auto">Target: 300</div>
+                    <div class="progress-bar mt-3">
+                        <div class="progress-fill" style="width: 61%"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card p-5 flex flex-col">
+                    <div class="text-sm mb-1">Successful Sales</div>
+                    <div class="text-2xl font-bold">76</div>
+                    <div class="text-sm opacity-80 mt-auto">Target: 100</div>
+                    <div class="progress-bar mt-3">
+                        <div class="progress-fill" style="width: 76%"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card p-5 flex flex-col">
+                    <div class="text-sm mb-1">Active Users</div>
+                    <div class="text-2xl font-bold">123</div>
+                    <div class="text-sm opacity-80 mt-auto">Target: 200</div>
+                    <div class="progress-bar mt-3">
+                        <div class="progress-fill" style="width: 61%"></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card p-5 flex flex-col">
+                    <div class="text-sm mb-1">Problems Solved</div>
+                    <div class="text-2xl font-bold">45</div>
+                    <div class="text-sm opacity-80 mt-auto">Target: 100</div>
+                    <div class="progress-bar mt-3">
+                        <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Creation Hub -->
+        <section class="card p-6 mb-10">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold">Product Listing Hub</h2>
+                <div class="flex space-x-3">
+                    <button class="btn-action px-4 py-2 rounded-lg font-medium">
+                        Save Changes
+                    </button>
+                    <button class="btn-primary px-4 py-2 rounded-lg font-medium">
+                        Create Listing
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2">
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium mb-2">Product Name</label>
+                        <input type="text" class="input-field w-full" placeholder="Enter the product name..." />
+                    </div>
+                    
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium mb-2">Product Description</label>
+                        <textarea class="input-field w-full min-h-[120px]" placeholder="Describe the product..."></textarea>
+                        <div class="text-xs text-textSecondary mt-1">Provide as much detail as possible.</div>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium mb-2">Price</label>
+                        <input type="number" class="input-field w-full" placeholder="Enter the price..." />
+                    </div>
+                    
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium mb-2">Upload Images</label>
+                        <div class="drag-drop-area p-6 text-center cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-textSecondary mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="text-sm text-textSecondary">Drag & drop images here or click to upload</p>
+                            <p class="text-xs text-textSecondary mt-1">Max file size: 10MB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Library & Analytics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+            <section class="card p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-semibold">Product Library</h2>
+                    <div class="flex space-x-2">
+                        <button class="btn-action px-3 py-2 rounded-lg text-sm font-medium">
+                            Refresh Listings
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="content-card border border-border rounded-lg p-4">
+                        <div class="flex justify-between">
+                            <div>
+                                <div class="font-semibold">Old Textbooks</div>
+                                <div class="text-sm text-textSecondary mt-1">Posted: Today, 10:24 AM</div>
+                            </div>
+                            <div class="badge badge-primary">Available</div>
+                        </div>
+                        <div class="mt-3 text-sm">
+                            "In good condition, used for one semester. Price: $20"
+                        </div>
+                        <div class="flex justify-between mt-4">
+                            <button class="btn-primary px-3 py-1 rounded-lg text-sm font-medium">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card border border-border rounded-lg p-4">
+                        <div class="flex justify-between">
+                            <div>
+                                <div class="font-semibold">Used Laptop</div>
+                                <div class="text-sm text-textSecondary mt-1">Posted: Yesterday, 3:45 PM</div>
+                            </div>
+                            <div class="badge badge-success">Sold</div>
+                        </div>
+                        <div class="mt-3 text-sm">
+                            "Great condition, perfect for college. Price: $400"
+                        </div>
+                        <div class="flex justify-between mt-4">
+                            <button class="btn-primary px-3 py-1 rounded-lg text-sm font-medium">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Analytics & Performance -->
+            <section class="card p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-semibold">Sales Analytics</h2>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="stat-card p-4">
+                        <div class="text-sm text-textSecondary mb-1">Total Revenue</div>
+                        <div class="text-xl font-bold">$1,200</div>
+                    </div>
+                    
+                    <div class="stat-card p-4">
+                        <div class="text-sm text-textSecondary mb-1">Total Transactions</div>
+                        <div class="text-xl font-bold">76</div>
+                    </div>
+                </div>
+
+                <canvas id="salesChart" height="200"></canvas>
+            </section>
+        </div>
+
+        <!-- Workflow & Human Review -->
+        <section class="card p-6 mb-10">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold">Workflow Overview</h2>
+                <button class="btn-action px-4 py-2 rounded-lg text-sm font-medium">
+                    Configure Workflow
+                </button>
+            </div>
+            
+            <div>
+                <div class="font-medium mb-3">Listing Approval Flow</div>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">1</div>
+                        <div>
+                            <div class="font-medium">User Submission</div>
+                            <div class="text-sm text-textSecondary">Submit details and images</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">2</div>
+                        <div>
+                            <div class="font-medium">Review Process</div>
+                            <div class="text-sm text-textSecondary">Verify product condition</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-action flex items-center justify-center text-white font-bold mr-3">3</div>
+                        <div>
+                            <div class="font-medium">Publish Listing</div>
+                            <div class="text-sm text-textSecondary">Available for sale</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Initialize chart
+        document.addEventListener('DOMContentLoaded', function() {
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [200, 150, 250, 350, 300, 400],
+                        borderColor: '#FF4D4D',
+                        backgroundColor: 'rgba(255, 77, 77, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
